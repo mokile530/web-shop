@@ -1,9 +1,9 @@
 <template>
 	<div>
-		<header class="header">
+		<!-- <header class="header">
 			<img class="logo" src="../assets/logo.png" alt="">
 			<span class="head-title">欢迎登录</span>
-		</header>
+		</header> -->
 		<section class="section-box">
 			<img class="pic" src="http://file.763g.com/tu/d/file/p/2015-05-21/imp1osfif217552.jpg">
 			<div class="login-box">
@@ -39,9 +39,6 @@ export default {
 </script>
 
 <style scoped>
-body {
-  background: #e5e5e5;
-}
 .logo {
   float: left;
 }
