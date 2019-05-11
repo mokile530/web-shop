@@ -14,31 +14,22 @@
         active-text-color="#000"
       >
         <el-menu-item class="nav-item" index="1">
-          <router-link to="/">首页</router-link>
+          <router-link class="link" to="/">首页</router-link>
         </el-menu-item>
         <el-menu-item class="nav-item" index="2">
-          <router-link to="/">鼠标</router-link>
+          <router-link class="link" to="list">商城</router-link>
         </el-menu-item>
-        <!-- <el-submenu index="2">鼠标
-          <template slot="title">商城</template>
-          <el-menu-item index="2-1">选项1</el-menu-item>
-          <el-menu-item index="2-2">选项2</el-menu-item>
-          <el-menu-item index="2-3">选项3</el-menu-item>
-          <el-submenu index="2-4">
-            <template slot="title">购物车</template>
-            <el-menu-item index="2-4-1">选项1</el-menu-item>
-            <el-menu-item index="2-4-2">选项2</el-menu-item>
-            <el-menu-item index="2-4-3">选项3</el-menu-item>
-          </el-submenu>
-        </el-submenu>-->
+        <!-- <el-menu-item class="nav-item" index="2">
+          <router-link class="link" :to="{ path: '/list', query: { type: 'mouse'} }">鼠标</router-link>
+        </el-menu-item>
         <el-menu-item class="nav-item" index="3">
-          <router-link to="/">键盘</router-link>
+          <router-link class="link" :to="{ path: '/list', query: { type: 'keyboard'} }">键盘</router-link>
         </el-menu-item>
         <el-menu-item class="nav-item" index="4">
-          <router-link to="/">耳机</router-link>
-        </el-menu-item>
-        <el-menu-item class="nav-item" index="5">
-          <router-link to="/">购物车</router-link>
+          <router-link class="link" :to="{ path: '/list', query: { type: 'headphone'} }">耳机</router-link>
+        </el-menu-item> -->
+        <el-menu-item class="nav-item" index="3">
+          <router-link class="link" to="/">购物车</router-link>
         </el-menu-item>
       </el-menu>
       <!-- 搜索框 -->
@@ -81,8 +72,18 @@ export default {
       activeIndex: "1",
       activeIndex2: "1",
       logined: false
-    };
-  }
+    }
+  },
+  methods: {
+      toType(type) {
+        this.$router.push({
+          name: 'list',
+          params: {
+            type: type
+          }
+        })
+      }
+    }
 };
 </script>
 
@@ -106,7 +107,7 @@ export default {
   margin: 30px 20px 0 40px;
 }
 .nav-item {
-  padding: 0 30px;
+  padding: 0;
   margin: 0 5px;
 }
 .logined {
@@ -142,6 +143,12 @@ export default {
 }
 .nav-reg:hover {
   color: rgb(216, 21, 102);
+}
+.link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0 30px;
 }
 </style>
 

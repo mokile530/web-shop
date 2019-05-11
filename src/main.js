@@ -7,7 +7,7 @@ import App from './App.vue'
 import Login from "./views/Login.vue";
 import Home from "./views/Home.vue";
 import Reg from "./views/Reg.vue";
- 
+import List from './views/List.vue'
 
 /* 以上是引入Ele-UI内容 */
 Vue.use(VueRouter)
@@ -27,10 +27,15 @@ const router = new VueRouter({
       component: Login
     },
     {
-      path: '/Reg',
+      path: '/reg',
       name: 'reg',
       component: Reg
-    }
+    },
+    {
+      path: '/list',
+      name: 'list',
+      component: List
+    },
   ]
 })
 

@@ -1,39 +1,63 @@
 <template>
-	<div>
-		<!-- <header class="header">
+  <div>
+    <!-- <header class="header">
 			<img class="logo" src="../assets/logo.png" alt="">
 			<span class="head-title">欢迎登录</span>
-		</header> -->
-		<section class="section-box">
-			<img class="pic" src="http://file.763g.com/tu/d/file/p/2015-05-21/imp1osfif217552.jpg">
-			<div class="login-box">
-				<form class="login">
-					<h3>
-						登录
-						<a href="#/Reg" class="reg">注册</a>
-					</h3>
-					<div class="input">
-						<i class="el-icon-user font"></i>
-						<el-input class="txt" v-model="input" placeholder="用户名"></el-input>
-					</div>
-					<div class="input">
-						<i class="el-icon-key font"></i>
-						<el-input class="password" placeholder="请输入密码" v-model="password" show-password ></el-input>
-					</div>
-					<el-button type="primary" class="login-button">登录</el-button>
-				</form>
-			</div>
-		</section>
-	</div>
+    </header>-->
+    <section class="section-box">
+      <img class="pic" src="http://file.763g.com/tu/d/file/p/2015-05-21/imp1osfif217552.jpg">
+      <div class="login-box">
+        <form class="login">
+          <h3>
+            登录
+            <a href="#/Reg" class="reg">注册</a>
+          </h3>
+          <div class="input">
+            <i class="el-icon-user font"></i>
+            <el-input class="txt" v-model="username" placeholder="用户名"></el-input>
+          </div>
+          <div class="input">
+            <i class="el-icon-key font"></i>
+            <el-input class="password" placeholder="请输入密码" v-model="password" show-password></el-input>
+          </div>
+          <el-button @click="login" type="primary" class="login-button">登录</el-button>
+        </form>
+      </div>
+    </section>
+  </div>
 </template>
 
 <script>
+import { path } from "../service/path.js";
+import axios from "axios";
 export default {
   data() {
     return {
-      input:'',
-			password:''
-		};
+      username: "",
+      password: ""
+    };
+  },
+  methods: {
+    login() {
+      axios
+        .post(`${path}user/login`, {
+          username: this.username,
+          password: this.password
+        })
+        .then(data => {
+          if (this.username != "" && this.password != "") {
+            if (data.data.status == "success") {
+              localStorage.setItem("token", data.data.token);
+              this.$router.push( { name: 'list' } )
+            } else {
+              alert("用户名或密码错误");
+              this.password = "";
+            }
+          } else {
+            alert("用户名与密码不能为空");
+          }
+        });
+    }
   }
 };
 </script>
@@ -96,8 +120,8 @@ h3 {
   color: rgb(231, 44, 147);
   font-size: 16px;
   float: right;
-	margin-right: 20px;
-	margin-top: 5px;
+  margin-right: 20px;
+  margin-top: 5px;
 }
 .input {
   display: block;
@@ -116,17 +140,17 @@ h3 {
   top: 33px;
 }
 .login-button {
-	background-color: #111;
-	border-color: #111;
-	width: 90%;
-	margin: 5%;
+  background-color: #111;
+  border-color: #111;
+  width: 90%;
+  margin: 5%;
 }
 .login-button:hover {
-	background-color: #000;
-	border-color: #000;
+  background-color: #000;
+  border-color: #000;
 }
 .login-button:focus {
-	background-color: #000;
-	border-color: #000;
+  background-color: #000;
+  border-color: #000;
 }
 </style>
