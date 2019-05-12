@@ -1,62 +1,76 @@
 <template>
-	<div>
-		<!-- <header class="header">
+  <div>
+    <!-- <header class="header">
 			<img class="logo" src="../assets/logo.png" alt="">
 			<span class="head-title">注册账号</span>
-		</header> -->
-		<section class="section-box">
-			<div class="reg-title">
-				<h2 class="reg-txt">注册</h2>
-				<p class="exist-count">已有账号？点击
-					<router-link class="to-login" to="/Login">登录</router-link>
-				</p>
-			</div>
-			<hr>
-			<!-- 注册信息 -->
-			<div class="reg-body">
-				<el-form
-					:model="ruleForm"
-					:rules="rules"
-					ref="ruleForm"
-					label-width="100px"
-					class="demo-ruleForm"
-				>
-					<!-- 手机号 -->
-					<el-form-item class="l-width" label="手机号" prop="MP">
-						<el-input v-model="ruleForm.MP"></el-input>
-					</el-form-item>
-					<!-- 短信验证 -->
-					<el-form-item class="s-width" label="短信验证码" prop="mes_ident">
-						<el-input v-model="ruleForm.mes_ident"></el-input>
-						<el-button class="btn-send" type="info" plain :disabled="send">{{send_mes}}</el-button>
-					</el-form-item>
-					<!-- 用户名 -->
-					<el-form-item class="l-width" label="用户名" prop="username">
-						<el-input v-model="ruleForm.username"></el-input>
-					</el-form-item>
-					<!-- 密码 -->
-					<el-form-item class="l-width" label="密码" prop="pass">
-						<el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
-					</el-form-item>
-					<!-- 确认密码 -->
-					<el-form-item class="l-width" label="确认密码" prop="checkPass">
-						<el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
-					</el-form-item>
-					<!-- 协议 -->
-					<div class="protocol">
-						<el-checkbox fill="#000" v-model="checked">我已同意用户服务协议</el-checkbox>
-					</div>
-				</el-form>
-				<!-- 注册按钮 -->
-				<el-button @click="submitForm('ruleForm')" type="primary" class="login-button">注册</el-button>
-			</div>
-		</section>
-	</div>
+    </header>-->
+    <section class="section-box">
+      <div class="reg-title">
+        <h2 class="reg-txt">注册</h2>
+        <p class="exist-count">已有账号？点击
+          <router-link class="to-login" to="/Login">登录</router-link>
+        </p>
+      </div>
+      <hr>
+      <!-- 注册信息 -->
+      <div class="reg-body">
+        <el-form
+          :model="ruleForm"
+          :rules="rules"
+          ref="ruleForm"
+          label-width="100px"
+          class="demo-ruleForm"
+        >
+          <!-- 手机号 -->
+          <el-form-item class="l-width" label="手机号" prop="MP">
+            <el-input v-model="ruleForm.MP"></el-input>
+          </el-form-item>
+          <!-- 短信验证 -->
+          <el-form-item class="s-width" label="短信验证码" prop="mes_ident">
+            <el-input v-model="ruleForm.num_ident"></el-input>
+            <el-button
+              @click="sendHandle"
+              class="btn-send"
+              type="info"
+              plain
+              :disabled="send"
+            >{{send_mes}}</el-button>
+          </el-form-item>
+          <!-- 用户名 -->
+          <el-form-item class="l-width" label="用户名" prop="username">
+            <el-input v-model="ruleForm.username"></el-input>
+          </el-form-item>
+          <!-- 密码 -->
+          <el-form-item class="l-width" label="密码" prop="pass">
+            <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+          </el-form-item>
+          <!-- 确认密码 -->
+          <el-form-item class="l-width" label="确认密码" prop="checkPass">
+            <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+          </el-form-item>
+          <!-- 协议 -->
+          <div class="protocol">
+            <el-checkbox fill="#000" v-model="checked">我已同意用户服务协议</el-checkbox>
+          </div>
+        </el-form>
+        <!-- 注册按钮 -->
+        <el-button
+          @click="submitForm('ruleForm')"
+          type="primary"
+          :disabled="!checked"
+          class="login-button"
+        >注册</el-button>
+      </div>
+    </section>
+  </div>
 </template>
 
 <script>
+import axios from "axios";
+import { path } from "../service/path";
 export default {
   data() {
+    /* 密码框1 */
     var validatePass = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请输入密码"));
@@ -67,24 +81,27 @@ export default {
         callback();
       }
     };
+    /* 密码框2 */
     var validatePass2 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm.pass) {
+      } else if (value !== this.ruleForm.password) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
       }
     };
     return {
+      aaa: 123456, //请求的验证码
       checked: true, //协议复选框
       send: false, //发送验证码按钮是否为禁用状态
-      send_mes: "发送验证码", //发送验证码按钮value值
+      send_mes: "获取验证码", //发送验证码按钮value值
+      counter: 60, //可再次发送验证码的等待时间
       ruleForm: {
         MP: "",
-        mes_ident: "",
+        num_ident: "",
         username: "",
-        pass: "",
+        password: "",
         checkPass: ""
       },
       rules: {
@@ -92,7 +109,7 @@ export default {
           { required: true, message: "请输入手机号", trigger: "blur" },
           { min: 11, max: 11, message: "请输入11位手机号码", trigger: "blur" }
         ],
-        mes_ident: [
+        num_ident: [
           { required: true, message: "请输入手机验证码", trigger: "blur" },
           { min: 6, max: 6, message: "验证码为6位数字", trigger: "blur" }
         ],
@@ -104,13 +121,53 @@ export default {
         checkPass: [
           { required: true, validator: validatePass2, trigger: "blur" }
         ]
-      },
-      methods: {
-        /* submitForm(formName) {
-          
-        } */
       }
     };
+  },
+  methods: {
+    /* 注册按钮 */
+    submitForm(ruleForm) {
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) {
+          if (this.aaa == this.ruleForm.num_ident) {
+            if (this.checked) {
+              axios
+                .post(`${path}user/reg`, {
+                  username: this.ruleForm.username,
+                  nickname: this.ruleForm.username,
+                  password: this.ruleForm.password,
+                  phone: this.ruleForm.MP,
+                })
+                .then((data) => {
+                  this.$message({
+                    message: "注册成功",
+                    type: "success"
+                  });
+                  this.$router.push({name: 'login'})
+                });
+            }
+          } else {
+            alert("验证码错误");
+          }
+        } else {
+          alert("error");
+          return false;
+        }
+      });
+    },
+    /* 发送验证码 */
+    sendHandle() {
+      this.send = true;
+      const timer = setInterval(() => {
+        this.counter--;
+        this.send_mes = `${this.counter}秒后可重新发送`;
+        if (this.counter <= 0) {
+          this.send_mes = "获取验证码";
+          this.send = false;
+          clearInterval(timer);
+        }
+      }, 1000);
+    }
   }
 };
 </script>

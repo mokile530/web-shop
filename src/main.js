@@ -37,6 +37,10 @@ const router = new VueRouter({
       component: List
     },
   ]
+});
+
+router.afterEach(function(to, from) {
+  
 })
 
 export default router;

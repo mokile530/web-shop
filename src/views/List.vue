@@ -38,10 +38,30 @@ export default {
       type: "",
       list: [],
 			pageCount: 1,
-			allCount: '',
+      allCount: '',
+      username: '',
+      nickname : '',
+      avatar: '',
+      admin: false,
+      id: '',
     };
   },
-  created() {},
+  created() {
+    if(localStorage.getItem('token')) {
+      this.logined = true;
+      axios.post(`${path}user/getInfo`, {
+        id: localStorage.getItem('token')
+      })
+        .then((data) => {
+          this.nickname = data.data.nickname;
+          this.username = data.data.username;
+          this.avatar = data.data.avatar;
+          this.admin = data.data.admin;
+        })
+    } else {
+      this.logined = false;
+    }
+  },
   mounted() {
     this.type = this.$route.query.type || "mouse";
     console.log(this.type);
@@ -141,6 +161,7 @@ span {
   float: left;
   font-size: 14px;
   margin-left: 80px;
+  cursor: pointer;
 }
 fieldset {
   border-top: 2px solid #000;

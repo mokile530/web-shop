@@ -27,7 +27,7 @@
         </el-menu-item>
         <el-menu-item class="nav-item" index="4">
           <router-link class="link" :to="{ path: '/list', query: { type: 'headphone'} }">耳机</router-link>
-        </el-menu-item> -->
+        </el-menu-item>-->
         <el-menu-item class="nav-item" index="3">
           <router-link class="link" to="/">购物车</router-link>
         </el-menu-item>
@@ -53,8 +53,8 @@
       </el-select>
       <!-- 登录 / 注册 -->
       <div class="logined" v-if="logined">
-        <img class="avatar" src="./assets/logo.png" alt="">
-        <span class="nick-name">123</span>
+        <img class="avatar" :src="avatar" alt="">
+        <span class="nick-name">{{nickname}}</span>
       </div>
       <div class="logined" v-else>
         <router-link class="nav-login" to="/login">登录</router-link>&nbsp;/&nbsp;
@@ -66,24 +66,50 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { path } from './service/path'
 export default {
   data() {
     return {
       activeIndex: "1",
       activeIndex2: "1",
-      logined: false
-    }
+      logined: false,
+      username: '',
+      nickname : '',
+      avatar: '',
+      admin: false,
+      id: '',
+    };
   },
   methods: {
-      toType(type) {
-        this.$router.push({
-          name: 'list',
-          params: {
-            type: type
-          }
-        })
-      }
+    toType(type) {
+      this.$router.push({
+        name: "list",
+        params: {
+          type: type
+        }
+      });
     }
+  },
+  created() {
+    if(localStorage.getItem('token')) {
+      this.logined = true;
+      axios.post(`${path}user/getInfo`, {
+        id: localStorage.getItem('token')
+      })
+        .then((data) => {
+          this.nickname = data.data.nickname;
+          this.username = data.data.username;
+          this.avatar = data.data.avatar;
+          this.admin = data.data.admin;
+        })
+    } else {
+      this.logined = false;
+    }
+  },
+  mounted() {
+    
+  }
 };
 </script>
 

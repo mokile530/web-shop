@@ -48,7 +48,12 @@ export default {
           if (this.username != "" && this.password != "") {
             if (data.data.status == "success") {
               localStorage.setItem("token", data.data.token);
-              this.$router.push( { name: 'list' } )
+              alert('登录成功')
+              this.$router.push({
+                name:
+                  "list" /* , query: { avatar: data.data.avatar , nickname = data.data.nickname , id : data.data.id } */
+              });
+              window.location.reload();
             } else {
               alert("用户名或密码错误");
               this.password = "";
