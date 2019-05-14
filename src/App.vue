@@ -16,7 +16,7 @@
           <router-link class="link" to="/">首页</router-link>
         </el-menu-item>
         <el-menu-item class="nav-item" index="2">
-          <router-link class="link" to="list">商城</router-link>
+          <router-link class="link" to="/list">商城</router-link>
         </el-menu-item>
         <!-- <el-menu-item class="nav-item" index="2">
           <router-link class="link" :to="{ path: '/list', query: { type: 'mouse'} }">鼠标</router-link>
@@ -28,7 +28,7 @@
           <router-link class="link" :to="{ path: '/list', query: { type: 'headphone'} }">耳机</router-link>
         </el-menu-item>-->
         <el-menu-item class="nav-item" index="3">
-          <router-link class="link" to="/">购物车</router-link>
+          <router-link class="link" to="/cart">购物车</router-link>
         </el-menu-item>
       </el-menu>
       <!-- 搜索框 -->

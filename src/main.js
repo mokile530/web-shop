@@ -9,6 +9,7 @@ import Home from "./views/Home.vue";
 import Reg from "./views/Reg.vue";
 import List from './views/List.vue'
 import Details from './views/Details.vue'
+import Cart from './views/Cart.vue'
 
 /* 以上是引入Ele-UI内容 */
 Vue.use(VueRouter)
@@ -42,6 +43,11 @@ const router = new VueRouter({
       name: 'details',
       component: Details
     },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: Cart
+    }
   ]
 });
 
