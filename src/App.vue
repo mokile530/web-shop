@@ -10,7 +10,6 @@
         :default-active="activeIndex"
         class="el-menu-demo"
         mode="horizontal"
-        @select="handleSelect"
         active-text-color="#000"
       >
         <el-menu-item class="nav-item" index="1">
@@ -41,7 +40,7 @@
         remote
         reserve-keyword
         placeholder="请输入关键词"
-        :remote-method="remoteMethod"
+        
         :loading="loading"
       >
         <el-option
@@ -79,6 +78,9 @@ export default {
       avatar: '',
       admin: false,
       id: '',
+      loading: false,
+      value: [],
+      options: [],
     };
   },
   methods: {

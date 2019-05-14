@@ -8,6 +8,7 @@ import Login from "./views/Login.vue";
 import Home from "./views/Home.vue";
 import Reg from "./views/Reg.vue";
 import List from './views/List.vue'
+import Details from './views/Details.vue'
 
 /* 以上是引入Ele-UI内容 */
 Vue.use(VueRouter)
@@ -36,12 +37,17 @@ const router = new VueRouter({
       name: 'list',
       component: List
     },
+    {
+      path: '/list/:id',
+      name: 'details',
+      component: Details
+    },
   ]
 });
 
-router.afterEach(function(to, from) {
+/* router.afterEach(function(to, from) {
   
-})
+}) */
 
 export default router;
 
