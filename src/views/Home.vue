@@ -8,7 +8,7 @@
     </el-carousel>
     <!-- 部分商品展示1 -->
     <div class="goods-show1">
-      <li class="item-show1" v-for="item in show1" :key="item">
+      <li class="item-show1" v-for="item in show1" :key="item.title1">
         <img class="pic-size" :src="item.pic" alt="">
         <div class="cover"></div>
         <span class="item-show1-title">{{item.title1}}</span>

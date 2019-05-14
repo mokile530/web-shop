@@ -25,7 +25,7 @@
           <router-link class="buy" :to="{ path: `list/${item._id}`, query: { type:type } }">
             <el-button type="primary">立即购买</el-button>
           </router-link>
-          <el-button class="into-cart" type="danger">加入购物车</el-button>
+          <el-button @click="intoCartHandle(item._id)" class="into-cart" type="danger">加入购物车</el-button>
         </li>
       </ul>
     </div>
@@ -55,15 +55,16 @@ export default {
       nickname: "",
       avatar: "",
       admin: false,
-      id: ""
+      uid: ""
     };
   },
   created() {
     if (localStorage.getItem("token")) {
       this.logined = true;
+      this.uid = localStorage.getItem('token')
       axios
         .post(`${path}user/getInfo`, {
-          id: localStorage.getItem("token")
+          uid: this.uid
         })
         .then(data => {
           this.nickname = data.data.nickname;
@@ -102,6 +103,21 @@ export default {
         .get(`${path}api/admin/get_prod?page=${val}&limit=15&type=${this.type}`)
         .then(data => {
           this.list = data.data.info.list;
+        });
+    },
+    /* 加入购物车按钮事件 */
+    intoCartHandle(gid) {
+      axios
+        .post(`${path}cart/add_cart`, {
+          type: this.type,
+          uid: this.uid,
+          gid: gid
+        })
+        .then(data => {
+          this.$message({
+            message: data.data.info,
+            type: data.data.status
+          });
         });
     }
   }
