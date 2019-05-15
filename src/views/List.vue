@@ -107,6 +107,12 @@ export default {
     },
     /* 加入购物车按钮事件 */
     intoCartHandle(gid) {
+      if(localStorage.getItem('token') == null) {
+        this.$message({
+          message: '您尚未登录哦',
+          type: 'info',
+        })
+      }
       axios
         .post(`${path}cart/add_cart`, {
           type: this.type,
