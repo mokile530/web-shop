@@ -152,7 +152,7 @@ export default {
 }
 .goods-show1 {
   margin: 0 auto 80px;
-  padding: 50px 150px;
+  padding: 0 150px 10px;
   background: #eee;
   overflow: hidden;
 }

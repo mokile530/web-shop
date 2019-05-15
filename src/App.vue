@@ -18,15 +18,6 @@
         <el-menu-item class="nav-item" index="2">
           <router-link class="link" to="/list">商城</router-link>
         </el-menu-item>
-        <!-- <el-menu-item class="nav-item" index="2">
-          <router-link class="link" :to="{ path: '/list', query: { type: 'mouse'} }">鼠标</router-link>
-        </el-menu-item>
-        <el-menu-item class="nav-item" index="3">
-          <router-link class="link" :to="{ path: '/list', query: { type: 'keyboard'} }">键盘</router-link>
-        </el-menu-item>
-        <el-menu-item class="nav-item" index="4">
-          <router-link class="link" :to="{ path: '/list', query: { type: 'headphone'} }">耳机</router-link>
-        </el-menu-item>-->
         <el-menu-item class="nav-item" index="3">
           <router-link class="link" to="/cart">购物车</router-link>
         </el-menu-item>
@@ -40,7 +31,6 @@
         remote
         reserve-keyword
         placeholder="请输入关键词"
-        
         :loading="loading"
       >
         <el-option
@@ -54,8 +44,11 @@
       <div class="logined" v-if="logined">
         <img class="avatar" :src="avatar" alt="">
         <span class="nick-name">{{nickname}}</span>
+        <div class="user-menu-box">
+          <li @click="logout" class="user-menu">退出登录</li>
+        </div>
       </div>
-      <div class="logined" v-else>
+      <div class="unlogined" v-else>
         <router-link class="nav-login" to="/login">登录</router-link>&nbsp;/&nbsp;
         <router-link class="nav-reg" to="/reg">注册</router-link>
       </div>
@@ -65,25 +58,26 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { path } from './service/path'
+import axios from "axios";
+import { path } from "./service/path";
 export default {
   data() {
     return {
       activeIndex: "1",
       activeIndex2: "1",
       logined: false,
-      username: '',
-      nickname : '',
-      avatar: '',
+      username: "",
+      nickname: "",
+      avatar: "",
       admin: false,
-      id: '',
+      id: "",
       loading: false,
       value: [],
-      options: [],
+      options: []
     };
   },
   methods: {
+    /* 选择类别 */
     toType(type) {
       this.$router.push({
         name: "list",
@@ -91,27 +85,31 @@ export default {
           type: type
         }
       });
+    },
+    /* 登出 */
+    logout() {
+      localStorage.removeItem('token');
+      window.location.reload();
     }
   },
   created() {
-    if(localStorage.getItem('token')) {
+    if (localStorage.getItem("token")) {
       this.logined = true;
-      axios.post(`${path}user/getInfo`, {
-        id: localStorage.getItem('token')
-      })
-        .then((data) => {
+      axios
+        .post(`${path}user/getInfo`, {
+          id: localStorage.getItem("token")
+        })
+        .then(data => {
           this.nickname = data.data.nickname;
           this.username = data.data.username;
           this.avatar = data.data.avatar;
           this.admin = data.data.admin;
-        })
+        });
     } else {
       this.logined = false;
     }
   },
-  mounted() {
-    
-  }
+  mounted() {}
 };
 </script>
 
@@ -138,13 +136,29 @@ export default {
   padding: 0;
   margin: 0 5px;
 }
-.logined {
+.unlogined {
   float: left;
+  padding: 5px 10px;
   margin: 33px 20px 0 10px;
   line-height: 30px;
   height: 30px;
 }
 
+.logined {
+  float: left;
+  padding: 5px 10px;
+  margin: 33px 20px 0 10px;
+  line-height: 30px;
+  height: 30px;
+  position: relative;
+  border-radius: 5px 5px 0 0  ;
+}
+.logined:hover {
+  background-color: #fff;
+}
+.logined:hover .user-menu-box {
+  display: block;
+}
 .avatar {
   width: 30px;
   height: 30px;
@@ -157,6 +171,26 @@ export default {
   color: rgb(56, 2, 87);
   display: block;
   float: right;
+}
+.user-menu-box {
+  position: absolute;
+  width: 100%;
+  background-color: #fff;
+  top: 40px;
+  left: 0;
+  display: none;
+}
+.user-menu {
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  color: #333;
+  font-size: 12px;
+  text-align: center;
+}
+.user-menu:hover {
+  background: rgba(240, 240, 240, .8);
+  color: red;
 }
 .nick-name:hover {
   color: rgb(216, 21, 102);
